@@ -16,10 +16,12 @@ internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
 
     private var content = mutableListOf<Byte>()
     private var state = State.READ_NOTHING
+    private var initPosition = 0
 
     override fun tokenize(): IntegerToken {
         content = mutableListOf()
         state = State.READ_NOTHING
+        initPosition = reader.getPosition()
 
         while (state != State.READ_END_TOKEN) {
             when (state) {
@@ -32,7 +34,7 @@ internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
             }
         }
 
-        return IntegerToken(content.toByteArray())
+        return IntegerToken(content.toByteArray(), initPosition, reader.getPosition() - 1)
     }
 
     private fun onReadNothing() {

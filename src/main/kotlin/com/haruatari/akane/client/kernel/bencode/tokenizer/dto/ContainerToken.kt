@@ -2,7 +2,7 @@ package com.haruatari.akane.client.kernel.bencode.tokenizer.dto
 
 import com.haruatari.akane.client.kernel.bencode.excetions.TokenizerException
 
-internal abstract class ContainerToken() : Token {
+internal abstract class ContainerToken(from: Int, to: Int) : Token(from, to) {
     override fun getRawContent(): ByteArray {
         throw TokenizerException("The list node doesn't support that method.")
     }

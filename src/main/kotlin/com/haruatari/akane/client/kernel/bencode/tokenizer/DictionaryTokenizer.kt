@@ -17,11 +17,13 @@ internal class DictionaryTokenizer(reader: Reader) : Tokenizer(reader) {
     private var state = State.READ_NOTHING
     private var content = mutableMapOf<String, Token>()
     private var lastKey: String? = null
+    private var initPosition = 0
 
     override fun tokenize(): DictionaryToken {
         content = mutableMapOf()
         state = State.READ_NOTHING
         lastKey = null
+        initPosition = reader.getPosition()
 
         while (state != State.READ_END_TOKEN) {
             when (state) {
@@ -33,7 +35,7 @@ internal class DictionaryTokenizer(reader: Reader) : Tokenizer(reader) {
             }
         }
 
-        return DictionaryToken(content)
+        return DictionaryToken(content, initPosition, reader.getPosition() - 1)
     }
 
     private fun onReadNothing() {

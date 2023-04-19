@@ -15,10 +15,12 @@ internal class ListTokenizer(reader: Reader) : Tokenizer(reader) {
 
     private var state = State.READ_NOTHING
     private var content = mutableListOf<Token>()
+    private var initPosition = 0
 
     override fun tokenize(): ListToken {
         content = mutableListOf()
         state = State.READ_NOTHING
+        initPosition = reader.getPosition()
 
         while (state != State.READ_END_TOKEN) {
             when (state) {
@@ -29,7 +31,7 @@ internal class ListTokenizer(reader: Reader) : Tokenizer(reader) {
             }
         }
 
-        return ListToken(content)
+        return ListToken(content, initPosition, reader.getPosition() - 1)
     }
 
     private fun onReadNothing() {

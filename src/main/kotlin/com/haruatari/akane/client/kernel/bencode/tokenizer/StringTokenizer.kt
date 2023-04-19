@@ -15,11 +15,13 @@ internal class StringTokenizer(reader: Reader) : Tokenizer(reader) {
     private var content = mutableListOf<Byte>()
     private var state = State.READING_SIZE
     private var length = 0
+    private var initPosition = 0
 
     override fun tokenize(): StringToken {
         content = mutableListOf()
         state = State.READING_SIZE
         length = 0
+        initPosition = reader.getPosition()
 
         while (state != State.COMPLETED) {
             when (state) {
@@ -29,7 +31,7 @@ internal class StringTokenizer(reader: Reader) : Tokenizer(reader) {
             }
         }
 
-        return StringToken(content.toByteArray())
+        return StringToken(content.toByteArray(), initPosition, reader.getPosition() - 1)
     }
 
     private fun onReadingSize() {

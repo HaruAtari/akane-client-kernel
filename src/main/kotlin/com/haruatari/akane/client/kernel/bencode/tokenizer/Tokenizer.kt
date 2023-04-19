@@ -6,7 +6,6 @@ import com.haruatari.akane.client.kernel.bencode.excetions.TokenizerException
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.Token
 
 internal abstract class Tokenizer(protected val reader: Reader) {
-    protected val minusToken: Byte = 45 // -
 
     abstract fun tokenize(): Token
 
@@ -18,7 +17,7 @@ internal abstract class Tokenizer(protected val reader: Reader) {
             SpecialSymbols.dictionaryBeginToken -> DictionaryTokenizer(reader)
             SpecialSymbols.intBeginToken -> IntegerTokenizer(reader)
             in SpecialSymbols.numberTokens -> StringTokenizer(reader)
-            else -> throw generateException("Undefined node's first char.")
+            else -> throw generateException("Undefined node's first char." + reader.getPosition())
         }
     }
 
