@@ -8,7 +8,6 @@ import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.Piece
 import com.haruatari.akane.client.kernel.bencode.excetions.DecoderException
 import com.haruatari.akane.client.kernel.bencode.tokenizer.TokenizerFacade
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.*
-import java.util.*
 
 internal class MetaInfoDecoder(private val reader: Reader) {
     internal fun decode(): MetaInfo {
@@ -38,11 +37,31 @@ internal class MetaInfoDecoder(private val reader: Reader) {
             throw DecoderException("The root dictionary should contains the 'info' dictionary element.")
         }
 
+        val nodeValue = node.getValue()
+
+        if (!nodeValue.containsKey("files") && !nodeValue.containsKey("length")) {
+            throw DecoderException("The info dictionary should contains one of the next elements: 'length' or 'files`.")
+        }
+        if (nodeValue.containsKey("files") && nodeValue.containsKey("length")) {
+            throw DecoderException("The info dictionary should contains only one of the next elements: 'length' or 'files`.")
+        }
+
         return Info(
-            pieceLength = decodePieceLength(node.getValue()),
-            pieces = decodePieces(node.getValue()),
-            files = decodeFiles(node.getValue())
+            name = decodeName(nodeValue),
+            pieceLength = decodePieceLength(nodeValue),
+            pieces = decodePieces(nodeValue),
+            length = decodeLength(nodeValue),
+            files = decodeFiles(nodeValue)
         )
+    }
+
+    private fun decodeName(infoRoot: Map<String, Token>): String {
+        val name = infoRoot["name"]
+        if (name == null || name !is StringToken) {
+            throw DecoderException("The info dictionary should contains the 'name' string element.")
+        }
+
+        return name.getValue();
     }
 
     private fun decodePieceLength(infoRoot: Map<String, Token>): Int {
@@ -72,33 +91,22 @@ internal class MetaInfoDecoder(private val reader: Reader) {
         }
     }
 
+    private fun decodeLength(infoRoot: Map<String, Token>): Int? {
+        val length = infoRoot["length"] ?: return null
+
+        if (length !is IntegerToken) {
+            throw DecoderException("The info.length element should be an integer.")
+        }
+
+        return length.getValue()
+    }
+
     private fun decodeFiles(infoRoot: Map<String, Token>): Array<File> {
-        val name = infoRoot["name"]
-        if (name == null || name !is StringToken) {
-            throw DecoderException("The info dictionary should contains the 'name' string element.")
+        val node = infoRoot["files"] ?: return emptyArray()
+
+        if (node !is ListToken) {
+            throw DecoderException("The info.files element should be a list.")
         }
-
-        return if (infoRoot.containsKey("files")) decodeMultipleFiles(infoRoot) else arrayOf(decodeSingleFile(infoRoot))
-    }
-
-    private fun decodeSingleFile(infoRoot: Map<String, Token>): File {
-        val length = infoRoot["length"]
-        if (length == null || length !is IntegerToken) {
-            throw DecoderException("For the single file torrent the info dictionary should contains the 'length' integer element.")
-        }
-
-        val name = infoRoot["name"] as StringToken
-
-        return File(name.getValue(), length.getValue())
-    }
-
-    private fun decodeMultipleFiles(infoRoot: Map<String, Token>): Array<File> {
-        val node = infoRoot["files"]
-        if (node == null || node !is ListToken) {
-            throw DecoderException("For the multi files torrent the info dictionary should contains the 'files' list element.")
-        }
-
-        val name = infoRoot["name"] as StringToken
 
         val result = mutableListOf<File>();
         for (item in node.getValue()) {
@@ -116,7 +124,7 @@ internal class MetaInfoDecoder(private val reader: Reader) {
                 throw DecoderException("The info.files should contains the 'path' list element.")
             }
 
-            val pathParts = mutableListOf<String>(name.getValue())
+            val pathParts = mutableListOf<String>()
             for (pathItem in path.getValue()) {
                 if (pathItem !is StringToken) {
                     throw DecoderException("The info.files.path should contains only string element.")
@@ -127,7 +135,7 @@ internal class MetaInfoDecoder(private val reader: Reader) {
 
             result.add(
                 File(
-                    pathParts.joinToString(System.getProperty("file.separator")),
+                    pathParts.toTypedArray(),
                     length.getValue()
                 )
             )

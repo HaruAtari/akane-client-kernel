@@ -13,6 +13,7 @@ class MetaInfoDecoderTest : ExpectSpec({
         decodeResource("/bencode/decoder/meta-info-single-file") shouldBe MetaInfo(
             announce = "udp://tracker.openbittorrent.com:8013",
             info = Info(
+                name = "image.jpg",
                 pieceLength = 65536,
                 pieces = arrayOf(
                     Piece("8fb5be7664e10ad5161053c23bd3dcc8625d2181"),
@@ -26,12 +27,8 @@ class MetaInfoDecoderTest : ExpectSpec({
                     Piece("a6fc9cb47a9eefec0468d53b2fce085dd3f836b1"),
                     Piece("78db6295f9f7d403a2fd1dbf8d3d277483c3955c"),
                 ),
-                files = arrayOf(
-                    File(
-                        path = "image.jpg",
-                        length = 633493
-                    )
-                )
+                length = 633493,
+                files = emptyArray()
             )
         )
     }
@@ -39,6 +36,7 @@ class MetaInfoDecoderTest : ExpectSpec({
         decodeResource("/bencode/decoder/meta-info-several-files") shouldBe MetaInfo(
             announce = "udp://tracker.openbittorrent.com:8013",
             info = Info(
+                name = "New folder",
                 pieceLength = 65536,
                 pieces = arrayOf(
                     Piece("8fb5be7664e10ad5161053c23bd3dcc8625d2181"),
@@ -53,17 +51,18 @@ class MetaInfoDecoderTest : ExpectSpec({
                     Piece("5597af9694462be768d733b9d47b5a774edc2b81"),
                     Piece("e9c71ebdb829f46351aae0dd877c579667351f82"),
                 ),
+                length = null,
                 files = arrayOf(
                     File(
-                        path = "New folder/image1.jpg",
+                        path = arrayOf("image1.jpg"),
                         length = 633493
                     ),
                     File(
-                        path = "New folder/dir1/image2.jpg",
+                        path = arrayOf("dir1", "image2.jpg"),
                         length = 32503
                     ),
                     File(
-                        path = "New folder/dir1/dir2/image3.jpg",
+                        path = arrayOf("dir1", "dir2", "image3.jpg"),
                         length = 32503
                     )
                 )
