@@ -17,6 +17,4 @@ internal class IntegerBoxer : Boxer() {
             SpecialSymbols.endToken
         );
     }
-
-
 }

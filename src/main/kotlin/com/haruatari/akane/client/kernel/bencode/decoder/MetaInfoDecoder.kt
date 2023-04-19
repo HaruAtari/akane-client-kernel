@@ -10,7 +10,7 @@ import com.haruatari.akane.client.kernel.bencode.tokenizer.TokenizerFacade
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.*
 
 internal class MetaInfoDecoder(private val reader: Reader) {
-    internal fun decode(): MetaInfo {
+    fun decode(): MetaInfo {
         val root = TokenizerFacade(reader).tokenize()
         if (root !is DictionaryToken) {
             throw DecoderException("The root node should be a dictionary.")
