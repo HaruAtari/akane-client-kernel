@@ -1,6 +1,6 @@
 package com.haruatari.akane.client.kernel.bencode.boxer
 
-import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.IntegerToken
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.NumberToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.ListToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.StringToken
 import io.kotest.core.spec.style.ExpectSpec
@@ -16,7 +16,7 @@ class ListBoxerTest : ExpectSpec({
                 byteArrayOf(108, 101)
             ),
             "with integer" to row(
-                ListToken(listOf(IntegerToken(10))),
+                ListToken(listOf(NumberToken(10))),
                 byteArrayOf(108, 105, 49, 48, 101, 101)
             ),
             "with string" to row(

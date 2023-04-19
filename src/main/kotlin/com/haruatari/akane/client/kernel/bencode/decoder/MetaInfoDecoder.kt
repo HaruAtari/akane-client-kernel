@@ -80,10 +80,10 @@ internal class MetaInfoDecoder(stream: InputStream) {
 
     private fun decodePieceLength(infoRoot: Map<String, Token>): Int {
         val node = infoRoot["piece length"]
-        if (node == null || node !is IntegerToken) {
+        if (node == null || node !is NumberToken) {
             throw DecoderException("The info dictionary should contains the 'piece length' integer element.")
         }
-        return node.getValue()
+        return node.getValue().toInt()
     }
 
     private fun decodePieces(infoRoot: Map<String, Token>): Array<Hash> {
@@ -105,10 +105,10 @@ internal class MetaInfoDecoder(stream: InputStream) {
         }
     }
 
-    private fun decodeLength(infoRoot: Map<String, Token>): Int? {
+    private fun decodeLength(infoRoot: Map<String, Token>): Long? {
         val length = infoRoot["length"] ?: return null
 
-        if (length !is IntegerToken) {
+        if (length !is NumberToken) {
             throw DecoderException("The info.length element should be an integer.")
         }
 
@@ -129,7 +129,7 @@ internal class MetaInfoDecoder(stream: InputStream) {
             }
 
             val length = item.getValue()["length"]
-            if (length == null || length !is IntegerToken) {
+            if (length == null || length !is NumberToken) {
                 throw DecoderException("The info.files should contains the 'length' integer element.")
             }
 

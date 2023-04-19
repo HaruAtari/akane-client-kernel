@@ -2,7 +2,7 @@ package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.excetions.TokenizerException
-import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.IntegerToken
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.NumberToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.ListToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.StringToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.Token
@@ -26,14 +26,14 @@ class ListTokenizerTest : ExpectSpec({
                 ),
                 "list of integers" to row(
                     "li11ei12ee", listOf(
-                        IntegerToken(byteArrayOf(49, 49)),
-                        IntegerToken(byteArrayOf(49, 50)),
+                        NumberToken(byteArrayOf(49, 49)),
+                        NumberToken(byteArrayOf(49, 50)),
                     )
                 ),
                 "mixed list" to row(
                     "l4:testi12ee", listOf(
                         StringToken(byteArrayOf(116, 101, 115, 116)),
-                        IntegerToken(byteArrayOf(49, 50)),
+                        NumberToken(byteArrayOf(49, 50)),
                     )
                 ),
                 "nested list" to row(

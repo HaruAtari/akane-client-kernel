@@ -1,6 +1,5 @@
 package com.haruatari.akane.client.kernel.bencode.encoder
 
-import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.decoder.MetaInfoDecoder
 import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.File
 import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Hash

@@ -9,7 +9,7 @@ internal abstract class Boxer {
     fun getBoxerForToken(token: Token): Boxer {
         return when (token) {
             is StringToken -> StringBoxer()
-            is IntegerToken -> IntegerBoxer()
+            is NumberToken -> IntegerBoxer()
             is ListToken -> ListBoxer()
             is DictionaryToken -> DictionaryBoxer()
             else -> throw BoxerException("Undefined token type")

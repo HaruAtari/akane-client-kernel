@@ -5,7 +5,7 @@ data class Info(
     val name: String,
     val pieceLength: Int,
     val pieces: Array<Hash>,
-    val length: Int?,
+    val length: Long?,
     val files: Array<File>
 ) {
     override fun equals(other: Any?): Boolean {
@@ -28,7 +28,7 @@ data class Info(
         var result = name.hashCode()
         result = 31 * result + pieceLength
         result = 31 * result + pieces.contentHashCode()
-        result = 31 * result + (length ?: 0)
+        result = (31 * result + (length ?: 0)).toInt()
         result = 31 * result + files.contentHashCode()
         return result
     }

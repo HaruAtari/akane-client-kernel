@@ -44,11 +44,11 @@ internal class AnnounceDecoder(stream: InputStream) {
 
     private fun decodeInterval(root: Map<String, Token>): Int {
         val node = root["interval"]
-        if (node == null || node !is IntegerToken) {
+        if (node == null || node !is NumberToken) {
             throw DecoderException("The root dictionary should contains the 'interval' integer element.")
         }
 
-        return node.getValue()
+        return node.getValue().toInt()
     }
 
     private fun decodePeers(root: Map<String, Token>): List<Peer> {
@@ -69,7 +69,7 @@ internal class AnnounceDecoder(stream: InputStream) {
             }
 
             val port = item.getValue()["port"]
-            if (port == null || port !is IntegerToken) {
+            if (port == null || port !is NumberToken) {
                 throw DecoderException("The peers should contains the 'port' integer element.")
             }
 
@@ -81,7 +81,7 @@ internal class AnnounceDecoder(stream: InputStream) {
             result.add(
                 Peer(
                     ip = ip.getValue(),
-                    port = port.getValue(),
+                    port = port.getValue().toInt(),
                     id = if (id is StringToken) id.getValue() else null
                 )
             )

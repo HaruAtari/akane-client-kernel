@@ -23,7 +23,7 @@ internal class MetaInfoEncoder {
     private fun encodeInfo(info: Info): DictionaryToken {
         val map = mutableMapOf<String, Token>(
             "name" to StringToken(info.name),
-            "piece length" to IntegerToken(info.pieceLength),
+            "piece length" to NumberToken(info.pieceLength.toLong()),
             "pieces" to StringToken(buildList {
                 for (piece in info.pieces) {
                     addAll(piece.getBytes().toList())
@@ -32,7 +32,7 @@ internal class MetaInfoEncoder {
         )
 
         if (info.length != null) {
-            map["length"] = IntegerToken(info.length)
+            map["length"] = NumberToken(info.length)
         }
 
         if (info.files.isNotEmpty()) {
@@ -49,7 +49,7 @@ internal class MetaInfoEncoder {
     private fun encodeFile(file: File): DictionaryToken {
         return DictionaryToken(
             mapOf(
-                "length" to IntegerToken(file.length),
+                "length" to NumberToken(file.length),
                 "path" to ListToken(buildList {
                     for (pathItem in file.path) {
                         add(StringToken(pathItem))

@@ -1,6 +1,7 @@
 package com.haruatari.akane.client.kernel.exchange
 
 import com.haruatari.akane.client.kernel.bencode.dto.announce.Peer
+import com.haruatari.akane.client.kernel.exchange.storage.Storage
 
 class Exchange(private val tracker: Tracker, private val storage: Storage) {
     enum class State {

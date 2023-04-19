@@ -1,7 +1,7 @@
 package com.haruatari.akane.client.kernel.bencode.boxer
 
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.DictionaryToken
-import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.IntegerToken
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.NumberToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.StringToken
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.data.row
@@ -16,7 +16,7 @@ class DictionaryBoxerTest : ExpectSpec({
                 byteArrayOf(100, 101)
             ),
             "with integer" to row(
-                DictionaryToken(mapOf("test" to IntegerToken(10))),
+                DictionaryToken(mapOf("test" to NumberToken(10))),
                 byteArrayOf(100, 52, 58, 116, 101, 115, 116, 105, 49, 48, 101, 101)
             ),
             "with string" to row(
@@ -30,8 +30,8 @@ class DictionaryBoxerTest : ExpectSpec({
             "unsorted dictionary" to row(
                 DictionaryToken(
                     mapOf(
-                        "b" to IntegerToken(2),
-                        "a" to IntegerToken(1)
+                        "b" to NumberToken(2),
+                        "a" to NumberToken(1)
                     )
                 ),
                 byteArrayOf(100, 49, 58, 97, 105, 49, 101, 49, 58, 98, 105, 50, 101, 101)

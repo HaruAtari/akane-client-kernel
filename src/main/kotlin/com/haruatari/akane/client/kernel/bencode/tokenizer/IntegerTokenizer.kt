@@ -2,7 +2,7 @@ package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.SpecialSymbols
-import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.IntegerToken
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.NumberToken
 
 internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
     private enum class State {
@@ -18,7 +18,7 @@ internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
     private var state = State.READ_NOTHING
     private var initPosition = 0
 
-    override fun tokenize(): IntegerToken {
+    override fun tokenize(): NumberToken {
         content = mutableListOf()
         state = State.READ_NOTHING
         initPosition = reader.getPosition()
@@ -34,7 +34,7 @@ internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
             }
         }
 
-        return IntegerToken(content.toByteArray(), initPosition, reader.getPosition() - 1)
+        return NumberToken(content.toByteArray(), initPosition, reader.getPosition() - 1)
     }
 
     private fun onReadNothing() {

@@ -3,7 +3,7 @@ package com.haruatari.akane.client.kernel.bencode.tokenizer
 import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.excetions.TokenizerException
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.DictionaryToken
-import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.IntegerToken
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.NumberToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.StringToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.Token
 import io.kotest.assertions.throwables.shouldThrow
@@ -21,7 +21,7 @@ class DictionaryTokenizerTest : ExpectSpec({
                 "plain dictionary" to row(
                     "d4:key14:test4:key2i12ee", mapOf(
                         "key1" to StringToken(byteArrayOf(116, 101, 115, 116)),
-                        "key2" to IntegerToken(byteArrayOf(49, 50)),
+                        "key2" to NumberToken(byteArrayOf(49, 50)),
                     )
                 ),
                 "nested dictionary" to row(

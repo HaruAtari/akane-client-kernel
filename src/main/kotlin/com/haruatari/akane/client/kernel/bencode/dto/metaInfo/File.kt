@@ -2,7 +2,7 @@ package com.haruatari.akane.client.kernel.bencode.dto.metaInfo
 
 data class File(
     val path: Array<String>,
-    val length: Int
+    val length: Long
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -18,7 +18,7 @@ data class File(
 
     override fun hashCode(): Int {
         var result = path.contentHashCode()
-        result = 31 * result + length
+        result = (31 * result + length).toInt()
         return result
     }
 }
