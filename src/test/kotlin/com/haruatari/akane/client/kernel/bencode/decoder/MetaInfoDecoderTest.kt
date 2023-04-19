@@ -35,6 +35,7 @@ class MetaInfoDecoderTest : ExpectSpec({
             )
         )
     }
+
     expect("several files") {
         decodeResource("/bencode/decoder/meta-info-several-files") shouldBe MetaInfo(
             announce = "udp://tracker.openbittorrent.com:8013",

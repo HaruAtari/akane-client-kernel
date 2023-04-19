@@ -118,7 +118,7 @@ internal class MetaInfoDecoder(private val reader: Reader) {
         val result = mutableListOf<File>();
         for (item in node.getValue()) {
             if (item !is DictionaryToken) {
-                throw DecoderException("The info.files list should contains only dictionary element.")
+                throw DecoderException("The info.files list should contains only dictionary elements.")
             }
 
             val length = item.getValue()["length"]
@@ -134,7 +134,7 @@ internal class MetaInfoDecoder(private val reader: Reader) {
             val pathParts = mutableListOf<String>()
             for (pathItem in path.getValue()) {
                 if (pathItem !is StringToken) {
-                    throw DecoderException("The info.files.path should contains only string element.")
+                    throw DecoderException("The info.files.path should contains only string elements.")
                 }
 
                 pathParts.add(pathItem.getValue())
