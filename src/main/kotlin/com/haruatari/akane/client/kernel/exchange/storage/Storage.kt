@@ -37,56 +37,32 @@ class Storage internal constructor(private val root: Path, files: List<File>) {
     }
 
     internal fun read(offset: Int, length: Int): ByteArray {
-        val totalBeginning = offset
-        val totalEnd = offset + length - 1
-        if (totalEnd > totalLength) {
-            throw StorageException("Trying to read from out of the storage. Offset: ${offset}, Length: ${length}, Actual size: $totalLength")
-        }
-
         val res = ByteBuffer.allocate(length)
-
-        var fileBeginning = 0L;
-        var fileEnd = 0L;
-        for ((i, storageFile) in storageFiles.withIndex()) {
-            if (i != 0) {
-                fileBeginning = fileEnd + 1;
-            }
-            fileEnd = fileBeginning + storageFile.length - 1
-
-            if (fileEnd < totalBeginning || fileBeginning > totalEnd) {
-                continue;
-            }
-
-            val accessBeginning = if (totalBeginning < fileBeginning) {
-                0
-            } else {
-                totalBeginning - fileBeginning
-            }
-
-            val accessLength = if (totalEnd > fileEnd) {
-                storageFile.length - accessBeginning;
-            } else {
-                totalEnd - fileBeginning - accessBeginning + 1
-            }
-
-            res.put(storageFile.read(accessBeginning, accessLength.toInt()))
+        accessData(offset, length) { file, fileOffset, fileLength ->
+            res.put(file.read(fileOffset, fileLength))
         }
 
         return res.array()
     }
 
     internal fun write(offset: Int, data: ByteArray) {
-        TODO()
+        var dataOffset = 0
+
+        accessData(offset, data.size) { file, fileOffset, fileLength ->
+            file.write(
+                fileOffset,
+                data.slice(dataOffset until dataOffset + fileLength).toByteArray()
+            )
+            dataOffset += fileLength
+        }
     }
 
-    private fun accessData(offset: Int, length: Int) {
+    private fun accessData(offset: Int, length: Int, callback: (file: StorageFile, offset: Long, length: Int) -> Unit) {
         val totalBeginning = offset
         val totalEnd = offset + length - 1
         if (totalEnd > totalLength) {
-            throw StorageException("Trying to read from out of the storage. Offset: ${offset}, Length: ${length}, Actual size: $totalLength")
+            throw StorageException("Trying to access storage out of the bounds. Offset: ${offset}, Length: ${length}, Actual size: $totalLength")
         }
-
-        val res = ByteBuffer.allocate(length)
 
         var fileBeginning = 0L;
         var fileEnd = 0L;
@@ -112,9 +88,7 @@ class Storage internal constructor(private val root: Path, files: List<File>) {
                 totalEnd - fileBeginning - accessBeginning + 1
             }
 
-            res.put(storageFile.read(accessBeginning, accessLength.toInt()))
+            callback(storageFile, accessBeginning, accessLength.toInt())
         }
-
-        return res.array()
     }
 }
