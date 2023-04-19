@@ -1,6 +1,7 @@
 package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
+import com.haruatari.akane.client.kernel.bencode.SpecialSymbols
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.ListToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.Token
 
@@ -34,7 +35,7 @@ internal class ListTokenizer(reader: Reader) : Tokenizer(reader) {
     private fun onReadNothing() {
         val byte = reader.readNextByte() ?: throw generateException("Unexpected end of file.")
 
-        if (byte != listBeginToken) {
+        if (byte != SpecialSymbols.listBeginToken) {
             throw generateException("The list node should start fom the 'l' character.")
         }
 
@@ -43,7 +44,7 @@ internal class ListTokenizer(reader: Reader) : Tokenizer(reader) {
 
     private fun onReadBeginningToken() {
         val nextByte = reader.seeNextByte() ?: throw generateException("Unexpected end of file.")
-        if (nextByte == endToken) {
+        if (nextByte == SpecialSymbols.endToken) {
             reader.readNextByte()
             state = State.READ_END_TOKEN
 

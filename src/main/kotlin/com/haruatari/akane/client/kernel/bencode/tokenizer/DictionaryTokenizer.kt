@@ -1,6 +1,7 @@
 package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
+import com.haruatari.akane.client.kernel.bencode.SpecialSymbols
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.DictionaryToken
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.Token
 
@@ -38,7 +39,7 @@ internal class DictionaryTokenizer(reader: Reader) : Tokenizer(reader) {
     private fun onReadNothing() {
         val byte = reader.readNextByte() ?: throw generateException("Unexpected end of file.")
 
-        if (byte != dictionaryBeginToken) {
+        if (byte != SpecialSymbols.dictionaryBeginToken) {
             throw generateException("The dictionary node should start fom the 'd' character.")
         }
 
@@ -47,7 +48,7 @@ internal class DictionaryTokenizer(reader: Reader) : Tokenizer(reader) {
 
     private fun onReadBeginningToken() {
         val nextByte = reader.seeNextByte() ?: throw generateException("Unexpected end of file.")
-        if (nextByte == endToken) {
+        if (nextByte == SpecialSymbols.endToken) {
             reader.readNextByte()
             state = State.READ_END_TOKEN
 

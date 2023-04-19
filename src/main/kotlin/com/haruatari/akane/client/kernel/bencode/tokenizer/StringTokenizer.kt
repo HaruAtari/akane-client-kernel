@@ -1,6 +1,7 @@
 package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
+import com.haruatari.akane.client.kernel.bencode.SpecialSymbols
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.StringToken
 import kotlin.text.Charsets.UTF_8
 
@@ -34,13 +35,13 @@ internal class StringTokenizer(reader: Reader) : Tokenizer(reader) {
     private fun onReadingSize() {
         val byte = reader.readNextByte() ?: throw generateException("Unexpected end of file.")
 
-        if (byte in numberTokens) {
+        if (byte in SpecialSymbols.numberTokens) {
             content.add(byte)
 
             return
         }
 
-        if (byte == stringDelimiterToken) {
+        if (byte == SpecialSymbols.stringDelimiterToken) {
             if (content.isEmpty()) {
                 throw generateException("The string node should start from the number.")
             }

@@ -1,6 +1,7 @@
 package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
+import com.haruatari.akane.client.kernel.bencode.SpecialSymbols
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.IntegerToken
 
 internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
@@ -37,7 +38,7 @@ internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
     private fun onReadNothing() {
         val byte = reader.readNextByte() ?: throw generateException("Unexpected end of file.")
 
-        if (byte != intBeginToken) {
+        if (byte != SpecialSymbols.intBeginToken) {
             throw generateException("The number node should start fom the 'i' character.")
         }
 
@@ -48,21 +49,21 @@ internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
         val byte = reader.readNextByte() ?: throw generateException("Unexpected end of file.")
 
         when (byte) {
-            minusToken -> {
+            SpecialSymbols.minusToken -> {
                 content.add(byte)
                 state = State.READ_MINUS
 
                 return
             }
 
-            numberTokens[0] -> {
+            SpecialSymbols.numberTokens[0] -> {
                 content.add(byte)
                 state = State.READ_LEAD_ZERO
 
                 return
             }
 
-            in numberTokens -> {
+            in SpecialSymbols.numberTokens -> {
                 content.add(byte)
                 state = State.READ_NUMBER
 
@@ -76,7 +77,7 @@ internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
     private fun onReadMinus() {
         val byte = reader.readNextByte() ?: throw generateException("Unexpected end of file.")
 
-        if (byte in numberTokens && byte != numberTokens[0]) {
+        if (byte in SpecialSymbols.numberTokens && byte != SpecialSymbols.numberTokens[0]) {
             content.add(byte)
             state = State.READ_NUMBER
 
@@ -89,7 +90,7 @@ internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
     private fun onReadLeadZero() {
         val byte = reader.readNextByte() ?: throw generateException("Unexpected end of file.")
 
-        if (byte == endToken) {
+        if (byte == SpecialSymbols.endToken) {
             state = State.READ_END_TOKEN
 
             return
@@ -102,13 +103,13 @@ internal class IntegerTokenizer(reader: Reader) : Tokenizer(reader) {
         val byte = reader.readNextByte() ?: throw generateException("Unexpected end of file.")
 
         when (byte) {
-            endToken -> {
+            SpecialSymbols.endToken -> {
                 state = State.READ_END_TOKEN
 
                 return
             }
 
-            in numberTokens -> {
+            in SpecialSymbols.numberTokens -> {
                 content.add(byte)
 
                 return
