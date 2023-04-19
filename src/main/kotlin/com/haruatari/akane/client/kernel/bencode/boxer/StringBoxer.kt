@@ -12,7 +12,7 @@ internal class StringBoxer : Boxer() {
         }
 
         return byteArrayOf(
-            *token.getValue().length.toString().toByteArray(Charsets.UTF_8),
+            *token.getRawContent().size.toString().toByteArray(Charsets.UTF_8),
             SpecialSymbols.stringDelimiterToken,
             *token.getRawContent()
         );
