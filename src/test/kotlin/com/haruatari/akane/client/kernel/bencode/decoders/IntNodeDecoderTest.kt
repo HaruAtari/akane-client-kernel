@@ -9,18 +9,19 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import java.io.ByteArrayInputStream
 
-class StringNodeDecoderTest : ExpectSpec({
+class IntNodeDecoderTest : ExpectSpec({
     context("decode - success") {
         withData(
             mapOf(
-                "long string" to row("11:long string", "long string"),
-                "short string" to row("4:test", "test"),
-                "empty string" to row("0:", ""),
-                "with tokens in the value" to row("6:dli10e", "dli10e")
+                "long positive" to row("i1023456789e", 1023456789),
+                "short positive" to row("i1e", 1),
+                "zero" to row("i0e", 0),
+                "long negative" to row("i-1023456789e", -1023456789),
+                "short negative" to row("i-1e", -1),
             )
-        ) { (raw: String, expected: String) ->
+        ) { (raw: String, expected: Int) ->
             val stream = ByteArrayInputStream(raw.toByteArray())
-            val decoder = StringNodeDecoder(Reader(stream))
+            val decoder = IntNodeDecoder(Reader(stream))
             decoder.decode().getValue() shouldBe expected
         }
     }
@@ -28,9 +29,12 @@ class StringNodeDecoderTest : ExpectSpec({
     context("decode - fail") {
         withData(
             mapOf(
-                "unexpected EOF in the length" to row("4"),
-                "unexpected EOF in the value" to row("4:t"),
-                "unexpected delimiter" to row(":test"),
+                "negative zero" to row("i-0e"),
+                "lead zero" to row("i01e"),
+                "lead negative zero" to row("i-01e"),
+                "without beginning token" to row("10e"),
+                "without end token" to row("i10"),
+                "unexpected char" to row("i10k10e"),
                 "empty content" to row(""),
             )
         ) { (raw: String) ->
