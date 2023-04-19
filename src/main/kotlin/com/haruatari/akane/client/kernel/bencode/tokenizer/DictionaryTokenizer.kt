@@ -1,10 +1,10 @@
-package com.haruatari.akane.client.kernel.bencode.decoders
+package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
-import com.haruatari.akane.client.kernel.bencode.dto.DictionaryNode
-import com.haruatari.akane.client.kernel.bencode.dto.Node
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.DictionaryToken
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.Token
 
-internal class DictionaryDecoder(reader: Reader) : NodeDecoder(reader) {
+internal class DictionaryTokenizer(reader: Reader) : Tokenizer(reader) {
     private enum class State {
         READ_NOTHING,
         READ_BEGINNING_TOKEN,
@@ -14,10 +14,10 @@ internal class DictionaryDecoder(reader: Reader) : NodeDecoder(reader) {
     }
 
     private var state = State.READ_NOTHING
-    private var content = mutableMapOf<String, Node>()
+    private var content = mutableMapOf<String, Token>()
     private var lastKey: String? = null
 
-    override fun decode(): DictionaryNode {
+    override fun tokenize(): DictionaryToken {
         content = mutableMapOf()
         state = State.READ_NOTHING
         lastKey = null
@@ -32,7 +32,7 @@ internal class DictionaryDecoder(reader: Reader) : NodeDecoder(reader) {
             }
         }
 
-        return DictionaryNode(content)
+        return DictionaryToken(content)
     }
 
     private fun onReadNothing() {
@@ -54,17 +54,17 @@ internal class DictionaryDecoder(reader: Reader) : NodeDecoder(reader) {
             return
         }
 
-        val decoder = buildDecoderForNextNode(reader)
-        if (decoder !is StringDecoder) {
+        val tokenizer = buildTokenizerForNextNode(reader)
+        if (tokenizer !is StringTokenizer) {
             throw generateException("Unexpected character. String node (dictionary key) is expected.")
         }
 
-        lastKey = decoder.decode().getValue()
+        lastKey = tokenizer.tokenize().getValue()
         state = State.READ_KEY
     }
 
     private fun onReadKey() {
-        val value = buildDecoderForNextNode(reader).decode()
+        val value = buildTokenizerForNextNode(reader).tokenize()
         content[lastKey!!] = value
         lastKey = null;
         state = State.READ_VALUE

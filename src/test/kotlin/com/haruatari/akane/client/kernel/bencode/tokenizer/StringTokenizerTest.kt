@@ -1,7 +1,7 @@
-package com.haruatari.akane.client.kernel.bencode.decoders
+package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
-import com.haruatari.akane.client.kernel.bencode.excetions.DecoderException
+import com.haruatari.akane.client.kernel.bencode.excetions.TokenizerException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.data.row
@@ -9,8 +9,8 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import java.io.ByteArrayInputStream
 
-class StringDecoderTest : ExpectSpec({
-    context("decode - success") {
+class StringTokenizerTest : ExpectSpec({
+    context("tokenize - success") {
         withData(
             mapOf(
                 "long string" to row("11:long string", "long string"),
@@ -19,11 +19,11 @@ class StringDecoderTest : ExpectSpec({
                 "with tokens in the value" to row("6:dli10e", "dli10e")
             )
         ) { (raw: String, expected: String) ->
-            generateDecoder(raw).decode().getValue() shouldBe expected
+            generateTokenizer(raw).tokenize().getValue() shouldBe expected
         }
     }
 
-    context("decode - fail") {
+    context("tokenize - fail") {
         withData(
             mapOf(
                 "unexpected EOF in the length" to row("4"),
@@ -33,14 +33,14 @@ class StringDecoderTest : ExpectSpec({
                 "empty content" to row(""),
             )
         ) { (raw: String) ->
-            shouldThrow<DecoderException> {
-                generateDecoder(raw).decode()
+            shouldThrow<TokenizerException> {
+                generateTokenizer(raw).tokenize()
             }
         }
     }
 })
 
-private fun generateDecoder(rawData: String) = StringDecoder(
+private fun generateTokenizer(rawData: String) = StringTokenizer(
     Reader(
         ByteArrayInputStream(
             rawData.toByteArray()

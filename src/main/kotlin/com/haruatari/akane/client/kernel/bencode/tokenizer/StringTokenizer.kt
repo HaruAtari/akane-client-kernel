@@ -1,10 +1,10 @@
-package com.haruatari.akane.client.kernel.bencode.decoders
+package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
-import com.haruatari.akane.client.kernel.bencode.dto.StringNode
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.StringToken
 import kotlin.text.Charsets.UTF_8
 
-internal class StringDecoder(reader: Reader) : NodeDecoder(reader) {
+internal class StringTokenizer(reader: Reader) : Tokenizer(reader) {
     private enum class State {
         READING_SIZE,
         READING_VALUE,
@@ -15,7 +15,7 @@ internal class StringDecoder(reader: Reader) : NodeDecoder(reader) {
     private var state = State.READING_SIZE
     private var length = 0
 
-    override fun decode(): StringNode {
+    override fun tokenize(): StringToken {
         content = mutableListOf()
         state = State.READING_SIZE
         length = 0
@@ -28,7 +28,7 @@ internal class StringDecoder(reader: Reader) : NodeDecoder(reader) {
             }
         }
 
-        return StringNode(content.toByteArray())
+        return StringToken(content.toByteArray())
     }
 
     private fun onReadingSize() {

@@ -1,10 +1,10 @@
-package com.haruatari.akane.client.kernel.bencode.decoders
+package com.haruatari.akane.client.kernel.bencode.tokenizer
 
 import com.haruatari.akane.client.kernel.bencode.Reader
-import com.haruatari.akane.client.kernel.bencode.dto.ListNode
-import com.haruatari.akane.client.kernel.bencode.dto.Node
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.ListToken
+import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.Token
 
-internal class ListDecoder(reader: Reader) : NodeDecoder(reader) {
+internal class ListTokenizer(reader: Reader) : Tokenizer(reader) {
     private enum class State {
         READ_NOTHING,
         READ_BEGINNING_TOKEN,
@@ -13,9 +13,9 @@ internal class ListDecoder(reader: Reader) : NodeDecoder(reader) {
     }
 
     private var state = State.READ_NOTHING
-    private var content = mutableListOf<Node>()
+    private var content = mutableListOf<Token>()
 
-    override fun decode(): ListNode {
+    override fun tokenize(): ListToken {
         content = mutableListOf()
         state = State.READ_NOTHING
 
@@ -28,7 +28,7 @@ internal class ListDecoder(reader: Reader) : NodeDecoder(reader) {
             }
         }
 
-        return ListNode(content)
+        return ListToken(content)
     }
 
     private fun onReadNothing() {
@@ -50,8 +50,8 @@ internal class ListDecoder(reader: Reader) : NodeDecoder(reader) {
             return
         }
 
-        val decoder = buildDecoderForNextNode(reader)
-        content.add(decoder.decode())
+        val tokenizer = buildTokenizerForNextNode(reader)
+        content.add(tokenizer.tokenize())
         state = State.READ_VALUE
     }
 }
