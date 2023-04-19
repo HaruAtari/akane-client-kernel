@@ -9,7 +9,7 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import java.io.ByteArrayInputStream
 
-class StringNodeDecoderTest : ExpectSpec({
+class StringDecoderTest : ExpectSpec({
     context("decode - success") {
         withData(
             mapOf(
@@ -40,7 +40,7 @@ class StringNodeDecoderTest : ExpectSpec({
     }
 })
 
-private fun generateDecoder(rawData: String) = StringNodeDecoder(
+private fun generateDecoder(rawData: String) = StringDecoder(
     Reader(
         ByteArrayInputStream(
             rawData.toByteArray()

@@ -1,9 +1,9 @@
 package com.haruatari.akane.client.kernel.bencode.decoders
 
 import com.haruatari.akane.client.kernel.bencode.Reader
-import com.haruatari.akane.client.kernel.bencode.dto.IntNode
+import com.haruatari.akane.client.kernel.bencode.dto.IntegerNode
 
-internal class IntNodeDecoder(reader: Reader) : NodeDecoder(reader) {
+internal class IntegerDecoder(reader: Reader) : NodeDecoder(reader) {
     private enum class State {
         READ_NOTHING,
         READ_BEGINNING_TOKEN,
@@ -16,7 +16,7 @@ internal class IntNodeDecoder(reader: Reader) : NodeDecoder(reader) {
     private var content = mutableListOf<Byte>()
     private var state = State.READ_NOTHING
 
-    override fun decode(): IntNode {
+    override fun decode(): IntegerNode {
         content = mutableListOf()
         state = State.READ_NOTHING
 
@@ -31,7 +31,7 @@ internal class IntNodeDecoder(reader: Reader) : NodeDecoder(reader) {
             }
         }
 
-        return IntNode(content.toByteArray())
+        return IntegerNode(content.toByteArray())
     }
 
     private fun onReadNothing() {

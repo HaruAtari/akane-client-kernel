@@ -13,19 +13,19 @@ internal abstract class NodeDecoder(protected val reader: Reader) {
     protected val numberTokens = byteArrayOf(48, 49, 50, 51, 52, 53, 54, 55, 56, 57)
     protected val minusToken: Byte = 45 // -
 
-    internal fun buildNext(reader: Reader): NodeDecoder {
+    abstract fun decode(): Node
+
+    protected fun buildDecoderForNextNode(reader: Reader): NodeDecoder {
         val nextByte = reader.seeNextByte() ?: throw generateException("Unexpected end of file.");
 
         return when (nextByte) {
-            listBeginToken -> ListNodeDecoder(reader)
-            dictionaryBeginToken -> DictionaryNodeDecoder(reader)
-            intBeginToken -> IntNodeDecoder(reader)
-            in numberTokens -> StringNodeDecoder(reader)
+            listBeginToken -> ListDecoder(reader)
+            dictionaryBeginToken -> DictionaryDecoder(reader)
+            intBeginToken -> IntegerDecoder(reader)
+            in numberTokens -> StringDecoder(reader)
             else -> throw generateException("Undefined node's first char.")
         }
     }
-
-    abstract fun decode(): Node
 
     protected fun generateException(message: String): DecoderException {
         return DecoderException(message + " Position: " + reader.getLastReadingPosition())

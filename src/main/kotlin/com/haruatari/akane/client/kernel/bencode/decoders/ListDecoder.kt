@@ -4,7 +4,7 @@ import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.dto.ListNode
 import com.haruatari.akane.client.kernel.bencode.dto.Node
 
-internal class ListNodeDecoder(reader: Reader) : NodeDecoder(reader) {
+internal class ListDecoder(reader: Reader) : NodeDecoder(reader) {
     private enum class State {
         READ_NOTHING,
         READ_BEGINNING_TOKEN,
@@ -50,7 +50,7 @@ internal class ListNodeDecoder(reader: Reader) : NodeDecoder(reader) {
             return
         }
 
-        val decoder = buildNext(reader)
+        val decoder = buildDecoderForNextNode(reader)
         content.add(decoder.decode())
         state = State.READ_VALUE
     }

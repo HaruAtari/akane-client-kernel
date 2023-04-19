@@ -2,7 +2,7 @@ package com.haruatari.akane.client.kernel.bencode.decoders
 
 import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.dto.DictionaryNode
-import com.haruatari.akane.client.kernel.bencode.dto.IntNode
+import com.haruatari.akane.client.kernel.bencode.dto.IntegerNode
 import com.haruatari.akane.client.kernel.bencode.dto.Node
 import com.haruatari.akane.client.kernel.bencode.dto.StringNode
 import com.haruatari.akane.client.kernel.bencode.excetions.DecoderException
@@ -13,7 +13,7 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import java.io.ByteArrayInputStream
 
-class DictionaryNodeDecoderTest : ExpectSpec({
+class DictionaryDecoderTest : ExpectSpec({
     context("decode - success") {
         withData(
             mapOf(
@@ -21,7 +21,7 @@ class DictionaryNodeDecoderTest : ExpectSpec({
                 "plain dictionary" to row(
                     "d4:key14:test4:key2i12ee", mapOf(
                         "key1" to StringNode(byteArrayOf(116, 101, 115, 116)),
-                        "key2" to IntNode(byteArrayOf(49, 50)),
+                        "key2" to IntegerNode(byteArrayOf(49, 50)),
                     )
                 ),
                 "nested dictionary" to row(
@@ -55,7 +55,7 @@ class DictionaryNodeDecoderTest : ExpectSpec({
     }
 })
 
-private fun generateDecoder(rawData: String) = DictionaryNodeDecoder(
+private fun generateDecoder(rawData: String) = DictionaryDecoder(
     Reader(
         ByteArrayInputStream(
             rawData.toByteArray()

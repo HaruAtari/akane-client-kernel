@@ -1,7 +1,7 @@
 package com.haruatari.akane.client.kernel.bencode.decoders
 
 import com.haruatari.akane.client.kernel.bencode.Reader
-import com.haruatari.akane.client.kernel.bencode.dto.IntNode
+import com.haruatari.akane.client.kernel.bencode.dto.IntegerNode
 import com.haruatari.akane.client.kernel.bencode.dto.ListNode
 import com.haruatari.akane.client.kernel.bencode.dto.Node
 import com.haruatari.akane.client.kernel.bencode.dto.StringNode
@@ -13,7 +13,7 @@ import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 import java.io.ByteArrayInputStream
 
-class ListNodeDecoderTest : ExpectSpec({
+class ListDecoderTest : ExpectSpec({
     context("decode - success") {
         withData(
             mapOf(
@@ -26,14 +26,14 @@ class ListNodeDecoderTest : ExpectSpec({
                 ),
                 "list of integers" to row(
                     "li11ei12ee", listOf(
-                        IntNode(byteArrayOf(49, 49)),
-                        IntNode(byteArrayOf(49, 50)),
+                        IntegerNode(byteArrayOf(49, 49)),
+                        IntegerNode(byteArrayOf(49, 50)),
                     )
                 ),
                 "mixed list" to row(
                     "l4:testi12ee", listOf(
                         StringNode(byteArrayOf(116, 101, 115, 116)),
-                        IntNode(byteArrayOf(49, 50)),
+                        IntegerNode(byteArrayOf(49, 50)),
                     )
                 ),
                 "nested list" to row(
@@ -66,7 +66,7 @@ class ListNodeDecoderTest : ExpectSpec({
     }
 })
 
-private fun generateDecoder(rawData: String) = ListNodeDecoder(
+private fun generateDecoder(rawData: String) = ListDecoder(
     Reader(
         ByteArrayInputStream(
             rawData.toByteArray()

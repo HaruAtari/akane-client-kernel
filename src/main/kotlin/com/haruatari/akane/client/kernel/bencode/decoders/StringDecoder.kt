@@ -4,7 +4,7 @@ import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.dto.StringNode
 import kotlin.text.Charsets.UTF_8
 
-internal class StringNodeDecoder(reader: Reader) : NodeDecoder(reader) {
+internal class StringDecoder(reader: Reader) : NodeDecoder(reader) {
     private enum class State {
         READING_SIZE,
         READING_VALUE,

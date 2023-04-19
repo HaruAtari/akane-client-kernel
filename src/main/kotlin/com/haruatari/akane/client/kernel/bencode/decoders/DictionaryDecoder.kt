@@ -4,7 +4,7 @@ import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.dto.DictionaryNode
 import com.haruatari.akane.client.kernel.bencode.dto.Node
 
-internal class DictionaryNodeDecoder(reader: Reader) : NodeDecoder(reader) {
+internal class DictionaryDecoder(reader: Reader) : NodeDecoder(reader) {
     private enum class State {
         READ_NOTHING,
         READ_BEGINNING_TOKEN,
@@ -54,8 +54,8 @@ internal class DictionaryNodeDecoder(reader: Reader) : NodeDecoder(reader) {
             return
         }
 
-        val decoder = buildNext(reader)
-        if (decoder !is StringNodeDecoder) {
+        val decoder = buildDecoderForNextNode(reader)
+        if (decoder !is StringDecoder) {
             throw generateException("Unexpected character. String node (dictionary key) is expected.")
         }
 
@@ -64,7 +64,7 @@ internal class DictionaryNodeDecoder(reader: Reader) : NodeDecoder(reader) {
     }
 
     private fun onReadKey() {
-        val value = buildNext(reader).decode()
+        val value = buildDecoderForNextNode(reader).decode()
         content[lastKey!!] = value
         lastKey = null;
         state = State.READ_VALUE
