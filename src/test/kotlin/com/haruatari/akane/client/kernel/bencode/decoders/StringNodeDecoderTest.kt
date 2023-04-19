@@ -31,6 +31,7 @@ class StringNodeDecoderTest : ExpectSpec({
                 "unexpected EOF in the length" to row("4"),
                 "unexpected EOF in the value" to row("4:t"),
                 "unexpected delimiter" to row(":test"),
+                "unexpected char" to row("test"),
                 "empty content" to row(""),
             )
         ) { (raw: String) ->

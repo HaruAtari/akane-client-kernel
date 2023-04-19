@@ -20,6 +20,14 @@ internal class Reader(private val stream: InputStream) {
         return bytes;
     }
 
+    fun seeNextByte(): Byte? {
+        stream.mark(1)
+        val bytes = stream.readNBytes(1)
+        stream.reset()
+
+        return if (bytes.isEmpty()) null else bytes[0]
+    }
+
     fun getPosition(): Int = position
     fun getLastReadingPosition(): Int = lastReadingPosition
 }
