@@ -1,13 +1,15 @@
 package com.haruatari.akane.client.kernel.bencode.decoder
 
 import com.haruatari.akane.client.kernel.bencode.Reader
-import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.File
-import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.Info
-import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.MetaInfo
-import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.Piece
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.File
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Info
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.MetaInfo
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Piece
+import io.kotest.core.spec.Order
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
 
+@Order(0)
 class MetaInfoDecoderTest : ExpectSpec({
     expect("single file") {
         decodeResource("/bencode/decoder/meta-info-single-file") shouldBe MetaInfo(

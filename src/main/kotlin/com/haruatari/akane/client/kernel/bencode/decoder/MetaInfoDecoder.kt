@@ -1,10 +1,10 @@
 package com.haruatari.akane.client.kernel.bencode.decoder
 
 import com.haruatari.akane.client.kernel.bencode.Reader
-import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.File
-import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.Info
-import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.MetaInfo
-import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.Piece
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.File
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Info
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.MetaInfo
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Piece
 import com.haruatari.akane.client.kernel.bencode.excetions.DecoderException
 import com.haruatari.akane.client.kernel.bencode.tokenizer.TokenizerFacade
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.*

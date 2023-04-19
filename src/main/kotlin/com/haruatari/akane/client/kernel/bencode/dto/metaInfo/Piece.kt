@@ -1,4 +1,4 @@
-package com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo
+package com.haruatari.akane.client.kernel.bencode.dto.metaInfo
 
 import java.util.*
 

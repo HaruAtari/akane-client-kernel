@@ -1,7 +1,7 @@
 package com.haruatari.akane.client.kernel.bencode
 
 import com.haruatari.akane.client.kernel.bencode.decoder.MetaInfoDecoder
-import com.haruatari.akane.client.kernel.bencode.decoder.dto.metaInfo.MetaInfo
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.MetaInfo
 import java.io.InputStream
 
 class Decoder : DecoderInterface {
