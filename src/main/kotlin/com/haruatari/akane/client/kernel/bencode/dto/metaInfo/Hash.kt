@@ -2,20 +2,20 @@ package com.haruatari.akane.client.kernel.bencode.dto.metaInfo
 
 import java.util.*
 
-fun Piece(hex: String): Piece {
+fun Hash(hex: String): Hash {
     check(hex.length % 2 == 0) { "HEX must have an even length" }
 
-    return Piece(hex.lowercase().chunked(2).map { it.toInt(16).toByte() }.toByteArray())
+    return Hash(hex.lowercase().chunked(2).map { it.toInt(16).toByte() }.toByteArray())
 }
 
-data class Piece(private val bytes: ByteArray) {
+data class Hash(private val bytes: ByteArray) {
     fun getBytes(): ByteArray = bytes
     fun getHex(): String = HexFormat.of().formatHex(bytes)
 
     override fun equals(other: Any?): Boolean {
         if (other is String) return other.lowercase() == getHex()
         if (other is ByteArray) return other.contentEquals(getBytes())
-        if (other !is Piece) return false
+        if (other !is Hash) return false
 
         return other.getBytes().contentEquals(getBytes())
     }
@@ -24,5 +24,5 @@ data class Piece(private val bytes: ByteArray) {
         return bytes.contentHashCode()
     }
 
-    override fun toString(): String = "Piece(hex=" + getHex() + ")"
+    override fun toString(): String = "Hash(hex=" + getHex() + ")"
 }

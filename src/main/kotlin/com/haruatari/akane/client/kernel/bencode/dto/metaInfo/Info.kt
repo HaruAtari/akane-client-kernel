@@ -1,9 +1,10 @@
 package com.haruatari.akane.client.kernel.bencode.dto.metaInfo
 
 data class Info(
+    val hash: Hash,
     val name: String,
     val pieceLength: Int,
-    val pieces: Array<Piece>,
+    val pieces: Array<Hash>,
     val length: Int?,
     val files: Array<File>
 ) {
@@ -13,6 +14,7 @@ data class Info(
 
         other as Info
 
+        if (hash != other.hash) return false
         if (name != other.name) return false
         if (pieceLength != other.pieceLength) return false
         if (!pieces.contentEquals(other.pieces)) return false

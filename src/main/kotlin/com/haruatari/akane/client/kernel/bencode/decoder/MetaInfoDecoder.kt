@@ -1,13 +1,15 @@
 package com.haruatari.akane.client.kernel.bencode.decoder
 
 import com.haruatari.akane.client.kernel.bencode.Reader
+import com.haruatari.akane.client.kernel.bencode.boxer.DictionaryBoxer
 import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.File
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Hash
 import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Info
 import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.MetaInfo
-import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Piece
 import com.haruatari.akane.client.kernel.bencode.excetions.DecoderException
 import com.haruatari.akane.client.kernel.bencode.tokenizer.TokenizerFacade
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.*
+import java.security.MessageDigest
 
 internal class MetaInfoDecoder(private val reader: Reader) {
     fun decode(): MetaInfo {
@@ -47,6 +49,11 @@ internal class MetaInfoDecoder(private val reader: Reader) {
         }
 
         return Info(
+            hash = Hash(
+                MessageDigest
+                    .getInstance("SHA-1")
+                    .digest(DictionaryBoxer().box(node))
+            ),
             name = decodeName(nodeValue),
             pieceLength = decodePieceLength(nodeValue),
             pieces = decodePieces(nodeValue),
@@ -72,7 +79,7 @@ internal class MetaInfoDecoder(private val reader: Reader) {
         return node.getValue()
     }
 
-    private fun decodePieces(infoRoot: Map<String, Token>): Array<Piece> {
+    private fun decodePieces(infoRoot: Map<String, Token>): Array<Hash> {
         val node = infoRoot["pieces"]
         if (node == null || node !is StringToken) {
             throw DecoderException("The info dictionary should contains the 'pieces' string element.")
@@ -87,7 +94,7 @@ internal class MetaInfoDecoder(private val reader: Reader) {
 
         return Array(bytes.size / pieceSize) { i ->
             val pieceContent = bytes.copyOfRange(i * pieceSize, (i + 1) * pieceSize)
-            Piece(pieceContent)
+            Hash(pieceContent)
         }
     }
 
