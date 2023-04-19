@@ -19,9 +19,7 @@ class StringNodeDecoderTest : ExpectSpec({
                 "with tokens in the value" to row("6:dli10e", "dli10e")
             )
         ) { (raw: String, expected: String) ->
-            val stream = ByteArrayInputStream(raw.toByteArray())
-            val decoder = StringNodeDecoder(Reader(stream))
-            decoder.decode().getValue() shouldBe expected
+            generateDecoder(raw).decode().getValue() shouldBe expected
         }
     }
 
@@ -35,11 +33,17 @@ class StringNodeDecoderTest : ExpectSpec({
                 "empty content" to row(""),
             )
         ) { (raw: String) ->
-            val stream = ByteArrayInputStream(raw.toByteArray())
-            val decoder = StringNodeDecoder(Reader(stream))
             shouldThrow<DecoderException> {
-                decoder.decode()
+                generateDecoder(raw).decode()
             }
         }
     }
 })
+
+private fun generateDecoder(rawData: String) = StringNodeDecoder(
+    Reader(
+        ByteArrayInputStream(
+            rawData.toByteArray()
+        )
+    )
+)

@@ -20,9 +20,7 @@ class IntNodeDecoderTest : ExpectSpec({
                 "short negative" to row("i-1e", -1),
             )
         ) { (raw: String, expected: Int) ->
-            val stream = ByteArrayInputStream(raw.toByteArray())
-            val decoder = IntNodeDecoder(Reader(stream))
-            decoder.decode().getValue() shouldBe expected
+            generateDecoder(raw).decode().getValue() shouldBe expected
         }
     }
 
@@ -38,11 +36,17 @@ class IntNodeDecoderTest : ExpectSpec({
                 "empty content" to row(""),
             )
         ) { (raw: String) ->
-            val stream = ByteArrayInputStream(raw.toByteArray())
-            val decoder = StringNodeDecoder(Reader(stream))
             shouldThrow<DecoderException> {
-                decoder.decode()
+                generateDecoder(raw).decode()
             }
         }
     }
 })
+
+private fun generateDecoder(rawData: String) = IntNodeDecoder(
+    Reader(
+        ByteArrayInputStream(
+            rawData.toByteArray()
+        )
+    )
+)

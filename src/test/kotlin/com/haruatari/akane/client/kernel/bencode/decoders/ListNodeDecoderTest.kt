@@ -47,9 +47,7 @@ class ListNodeDecoderTest : ExpectSpec({
                 ),
             )
         ) { (raw: String, expected: List<Node>) ->
-            val stream = ByteArrayInputStream(raw.toByteArray())
-            val decoder = ListNodeDecoder(Reader(stream))
-            decoder.decode().getValue() shouldBe expected
+            generateDecoder(raw).decode().getValue() shouldBe expected
         }
     }
 
@@ -61,11 +59,17 @@ class ListNodeDecoderTest : ExpectSpec({
                 "invalid nested node" to row("l123e"),
             )
         ) { (raw: String) ->
-            val stream = ByteArrayInputStream(raw.toByteArray())
-            val decoder = StringNodeDecoder(Reader(stream))
             shouldThrow<DecoderException> {
-                decoder.decode()
+                generateDecoder(raw).decode()
             }
         }
     }
 })
+
+private fun generateDecoder(rawData: String) = ListNodeDecoder(
+    Reader(
+        ByteArrayInputStream(
+            rawData.toByteArray()
+        )
+    )
+)

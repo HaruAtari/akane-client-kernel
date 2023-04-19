@@ -17,6 +17,9 @@ internal class IntNodeDecoder(reader: Reader) : NodeDecoder(reader) {
     private var state = State.READ_NOTHING
 
     override fun decode(): IntNode {
+        content = mutableListOf()
+        state = State.READ_NOTHING
+
         while (state != State.READ_END_TOKEN) {
             when (state) {
                 State.READ_NOTHING -> onReadNothing()
@@ -73,7 +76,7 @@ internal class IntNodeDecoder(reader: Reader) : NodeDecoder(reader) {
     private fun onReadMinus() {
         val byte = reader.readNextByte() ?: throw generateException("Unexpected end of file.")
 
-        if (byte in numberTokens && byte != minusToken) {
+        if (byte in numberTokens && byte != numberTokens[0]) {
             content.add(byte)
             state = State.READ_NUMBER
 

@@ -16,6 +16,9 @@ internal class ListNodeDecoder(reader: Reader) : NodeDecoder(reader) {
     private var content = mutableListOf<Node>()
 
     override fun decode(): ListNode {
+        content = mutableListOf()
+        state = State.READ_NOTHING
+
         while (state != State.READ_END_TOKEN) {
             when (state) {
                 State.READ_NOTHING -> onReadNothing()

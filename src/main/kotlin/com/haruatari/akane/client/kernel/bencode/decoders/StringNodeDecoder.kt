@@ -16,6 +16,10 @@ internal class StringNodeDecoder(reader: Reader) : NodeDecoder(reader) {
     private var length = 0
 
     override fun decode(): StringNode {
+        content = mutableListOf()
+        state = State.READING_SIZE
+        length = 0
+
         while (state != State.COMPLETED) {
             when (state) {
                 State.READING_SIZE -> onReadingSize()
