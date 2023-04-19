@@ -1,6 +1,5 @@
 package com.haruatari.akane.client.kernel.bencode
 
-import com.haruatari.akane.client.kernel.bencode.dto.announce.Tracker
 import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.MetaInfo
 import java.io.InputStream
 
