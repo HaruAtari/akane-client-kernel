@@ -2,13 +2,20 @@ package com.haruatari.akane.client.kernel.bencode.decoder
 
 import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.dto.announce.Peer
-import com.haruatari.akane.client.kernel.bencode.dto.announce.Announce
+import com.haruatari.akane.client.kernel.bencode.dto.announce.Tracker
 import com.haruatari.akane.client.kernel.bencode.excetions.DecoderException
 import com.haruatari.akane.client.kernel.bencode.tokenizer.TokenizerFacade
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.*
+import java.io.InputStream
 
-internal class AnnounceDecoder(private val reader: Reader) {
-    fun decode(): Announce {
+internal class AnnounceTrackerDecoder(stream: InputStream) {
+    private val reader: Reader
+
+    init {
+        reader = Reader(stream)
+    }
+
+    fun decode(): Tracker {
         val root = TokenizerFacade(reader).tokenize()
         if (root !is DictionaryToken) {
             throw DecoderException("The root node should be a dictionary.")
@@ -21,14 +28,14 @@ internal class AnnounceDecoder(private val reader: Reader) {
                 throw DecoderException("Tracker response contains the 'failure reason' field but it's not a string.")
             }
 
-            return Announce(
+            return Tracker(
                 failureReason = failureReasonToken.getValue(),
                 interval = null,
                 peers = emptyList()
             );
         }
 
-        return Announce(
+        return Tracker(
             failureReason = null,
             interval = decodeInterval(root.getValue()),
             peers = decodePeers(root.getValue())

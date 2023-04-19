@@ -35,7 +35,7 @@ class MetaInfoEncoderTest : ExpectSpec({
                 files = emptyArray()
             )
         )
-        val actual = MetaInfoDecoder(Reader(MetaInfoEncoder().encode(expected))).decode()
+        val actual = MetaInfoDecoder(MetaInfoEncoder().encode(expected)).decode()
         actual shouldBe expected
     }
 
@@ -76,7 +76,7 @@ class MetaInfoEncoderTest : ExpectSpec({
                 )
             )
         )
-        val actual = MetaInfoDecoder(Reader(MetaInfoEncoder().encode(expected))).decode()
+        val actual = MetaInfoDecoder(MetaInfoEncoder().encode(expected)).decode()
         actual shouldBe expected
     }
 })

@@ -78,7 +78,7 @@ class MetaInfoDecoderTest : ExpectSpec({
 
 private fun decodeResource(resourceName: String): MetaInfo {
     val resource = object {}::class.java.getResourceAsStream(resourceName)
-    val decoder = MetaInfoDecoder(Reader(resource!!))
+    val decoder = MetaInfoDecoder(resource!!)
 
     return decoder.decode()
 }

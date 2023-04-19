@@ -9,9 +9,16 @@ import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.MetaInfo
 import com.haruatari.akane.client.kernel.bencode.excetions.DecoderException
 import com.haruatari.akane.client.kernel.bencode.tokenizer.TokenizerFacade
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.*
+import java.io.InputStream
 import java.security.MessageDigest
 
-internal class MetaInfoDecoder(private val reader: Reader) {
+internal class MetaInfoDecoder(stream: InputStream) {
+    private val reader: Reader
+
+    init {
+        reader = Reader(stream)
+    }
+
     fun decode(): MetaInfo {
         val root = TokenizerFacade(reader).tokenize()
         if (root !is DictionaryToken) {
