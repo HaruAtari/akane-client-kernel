@@ -1,4 +1,4 @@
-package com.haruatari.akane.client.kernel.exchange.storage
+package com.haruatari.akane.client.kernel.storage
 
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.data.row
@@ -6,7 +6,7 @@ import io.kotest.datatest.withData
 import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.shouldBe
 
-class StorageFileTest : ExpectSpec({
+class FileTest : ExpectSpec({
     context("read") {
         withData(
             mapOf(
@@ -30,7 +30,7 @@ class StorageFileTest : ExpectSpec({
 
             val file = tempfile()
             file.writeBytes(fileData)
-            StorageFile(file.path, fileData.size.toLong()).read(offset, length) shouldBe expected
+            File(file.path, fileData.size.toLong()).read(offset, length) shouldBe expected
         }
     }
 
@@ -60,7 +60,7 @@ class StorageFileTest : ExpectSpec({
             val file = tempfile()
             file.writeBytes(fileData)
 
-            val storageFile = StorageFile(file.path, fileData.size.toLong())
+            val storageFile = File(file.path, fileData.size.toLong())
             storageFile.write(offset, writingData)
 
             file.readBytes() shouldBe expected

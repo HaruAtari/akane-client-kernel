@@ -1,13 +1,18 @@
-package com.haruatari.akane.client.kernel.exchange.storage
+package com.haruatari.akane.client.kernel.storage
 
-import com.haruatari.akane.client.kernel.exchange.exception.StorageException
+import com.haruatari.akane.client.kernel.storage.exception.StorageException
+import java.io.Closeable
 import java.io.FileNotFoundException
 import java.io.RandomAccessFile
+import java.nio.file.Path
 
-internal data class StorageFile(private val path: String, val length: Long) {
+class File(private val path: Path, val length: Long) : FileInterface, Closeable {
     private var fileAccess: RandomAccessFile? = null
 
-    fun read(offset: Long, length: Int): ByteArray {
+    constructor(path: File, length: Long) : this(path.path, length)
+    constructor(path: String, length: Long) : this(Path.of(path), length)
+
+    override fun read(offset: Long, length: Int): ByteArray {
         if (length > this.length) {
             throw StorageException("Trying to read from out of file. Offset: ${offset}, Length: ${length}, Actual size: ${this.length}")
         }
@@ -20,7 +25,7 @@ internal data class StorageFile(private val path: String, val length: Long) {
         return buffer
     }
 
-    fun write(offset: Long, data: ByteArray) {
+    override fun write(offset: Long, data: ByteArray) {
         if (length > this.length) {
             throw StorageException("Trying to write to out of file. Offset: ${offset}, Length: ${length}, Actual size: ${this.length}")
         }
@@ -33,12 +38,16 @@ internal data class StorageFile(private val path: String, val length: Long) {
     private fun getAccess(): RandomAccessFile {
         if (fileAccess == null) {
             try {
-                fileAccess = RandomAccessFile(path, "rwd")
+                fileAccess = RandomAccessFile(path.toFile(), "rwd")
             } catch (e: FileNotFoundException) {
                 throw StorageException("Can't create the '${path}' file.")
             }
         }
 
         return fileAccess!!
+    }
+
+    override fun close() {
+        fileAccess?.close()
     }
 }
