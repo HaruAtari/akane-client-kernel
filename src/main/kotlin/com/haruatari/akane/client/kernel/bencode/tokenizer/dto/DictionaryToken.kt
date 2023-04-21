@@ -8,7 +8,7 @@ internal class DictionaryToken(private val content: Map<String, Token>, from: In
     override fun getValue(): Map<String, Token> = content
 
     override fun toString(): String {
-        var result = "DictionaryToken(from: $from; to: $to; size: ${content.size}; value:\n";
+        var result = "DictionaryToken(from: $from; to: $to; size: ${content.size}; value:\n"
         for ((key, value) in content) {
             result += "$key: $value,\n"
         }

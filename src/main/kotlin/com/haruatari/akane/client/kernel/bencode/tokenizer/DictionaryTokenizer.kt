@@ -69,7 +69,7 @@ internal class DictionaryTokenizer(reader: Reader) : Tokenizer(reader) {
     private fun onReadKey() {
         val value = buildTokenizerForNextNode(reader).tokenize()
         content[lastKey!!] = value
-        lastKey = null;
+        lastKey = null
         state = State.READ_VALUE
     }
 }

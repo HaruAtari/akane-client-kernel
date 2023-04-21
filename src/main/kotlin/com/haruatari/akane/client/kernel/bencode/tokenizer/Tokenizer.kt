@@ -10,7 +10,7 @@ internal abstract class Tokenizer(protected val reader: Reader) {
     abstract fun tokenize(): Token
 
     protected fun buildTokenizerForNextNode(reader: Reader): Tokenizer {
-        val nextByte = reader.seeNextByte() ?: throw generateException("Unexpected end of file.");
+        val nextByte = reader.seeNextByte() ?: throw generateException("Unexpected end of file.")
 
         return when (nextByte) {
             SpecialSymbols.listBeginToken -> ListTokenizer(reader)

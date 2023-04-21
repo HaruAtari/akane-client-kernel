@@ -24,7 +24,7 @@ internal class Reader(stream: InputStream) {
         val bytes = s.readNBytes(length)
         position += bytes.count()
 
-        return bytes;
+        return bytes
     }
 
     fun seeNextByte(): Byte? {

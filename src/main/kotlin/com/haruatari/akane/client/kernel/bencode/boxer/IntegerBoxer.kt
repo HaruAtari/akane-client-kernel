@@ -15,6 +15,6 @@ internal class IntegerBoxer : Boxer() {
             SpecialSymbols.intBeginToken,
             *token.getRawContent(),
             SpecialSymbols.endToken
-        );
+        )
     }
 }

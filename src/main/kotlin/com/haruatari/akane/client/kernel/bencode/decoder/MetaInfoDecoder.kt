@@ -75,7 +75,7 @@ internal class MetaInfoDecoder(stream: InputStream) {
             throw DecoderException("The info dictionary should contains the 'name' string element.")
         }
 
-        return name.getValue();
+        return name.getValue()
     }
 
     private fun decodePieceLength(infoRoot: Map<String, Token>): Int {
@@ -122,7 +122,7 @@ internal class MetaInfoDecoder(stream: InputStream) {
             throw DecoderException("The info.files element should be a list.")
         }
 
-        val result = mutableListOf<File>();
+        val result = mutableListOf<File>()
         for (item in node.getValue()) {
             if (item !is DictionaryToken) {
                 throw DecoderException("The info.files list should contains only dictionary elements.")

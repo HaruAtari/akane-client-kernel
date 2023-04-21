@@ -32,7 +32,7 @@ internal class AnnounceDecoder(stream: InputStream) {
                 failureReason = failureReasonToken.getValue(),
                 interval = null,
                 peers = emptyList()
-            );
+            )
         }
 
         return Announce(
@@ -57,7 +57,7 @@ internal class AnnounceDecoder(stream: InputStream) {
             throw DecoderException("The root dictionary should contains the 'peers' list element.")
         }
 
-        val result = mutableListOf<Peer>();
+        val result = mutableListOf<Peer>()
         for (item in node.getValue()) {
             if (item !is DictionaryToken) {
                 throw DecoderException("The peers list should contains only dictionary elements.")

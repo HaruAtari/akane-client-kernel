@@ -15,6 +15,6 @@ internal class StringBoxer : Boxer() {
             *token.getRawContent().size.toString().toByteArray(Charsets.UTF_8),
             SpecialSymbols.stringDelimiterToken,
             *token.getRawContent()
-        );
+        )
     }
 }
