@@ -1,7 +1,7 @@
 package com.haruatari.akane.client.kernel.bencode.dto.announce
 
 data class Peer(
-    val ip: String?,
-    val port: Int,
-    val id: String?
-)
+    override val ip: String?,
+    override val port: Int,
+    override val id: String?
+) : PeerInterface

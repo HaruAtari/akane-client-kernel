@@ -2,7 +2,9 @@ package com.haruatari.akane.client.kernel.bencode.decoder
 
 import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.dto.announce.Announce
+import com.haruatari.akane.client.kernel.bencode.dto.announce.AnnounceInterface
 import com.haruatari.akane.client.kernel.bencode.dto.announce.Peer
+import com.haruatari.akane.client.kernel.bencode.dto.announce.PeerInterface
 import com.haruatari.akane.client.kernel.bencode.excetions.DecoderException
 import com.haruatari.akane.client.kernel.bencode.tokenizer.TokenizerFacade
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.*
@@ -15,7 +17,7 @@ internal class AnnounceDecoder(stream: InputStream) {
         reader = Reader(stream)
     }
 
-    fun decode(): Announce {
+    fun decode(): AnnounceInterface {
         val root = TokenizerFacade(reader).tokenize()
         if (root !is DictionaryToken) {
             throw DecoderException("The root node should be a dictionary.")
@@ -51,13 +53,13 @@ internal class AnnounceDecoder(stream: InputStream) {
         return node.getValue().toInt()
     }
 
-    private fun decodePeers(root: Map<String, Token>): List<Peer> {
+    private fun decodePeers(root: Map<String, Token>): List<PeerInterface> {
         val node = root["peers"]
         if (node == null || node !is ListToken) {
             throw DecoderException("The root dictionary should contains the 'peers' list element.")
         }
 
-        val result = mutableListOf<Peer>()
+        val result = mutableListOf<PeerInterface>()
         for (item in node.getValue()) {
             if (item !is DictionaryToken) {
                 throw DecoderException("The peers list should contains only dictionary elements.")

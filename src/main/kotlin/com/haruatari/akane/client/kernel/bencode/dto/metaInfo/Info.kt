@@ -1,13 +1,13 @@
 package com.haruatari.akane.client.kernel.bencode.dto.metaInfo
 
 data class Info(
-    val hash: Hash,
-    val name: String,
-    val pieceLength: Int,
-    val pieces: Array<Hash>,
-    val length: Long?,
-    val files: Array<File>
-) {
+    override val hash: HashInterface,
+    override val name: String,
+    override val pieceLength: Int,
+    override val pieces: Array<HashInterface>,
+    override val length: Long?,
+    override val files: Array<FileInterface>
+) : InfoInterface {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

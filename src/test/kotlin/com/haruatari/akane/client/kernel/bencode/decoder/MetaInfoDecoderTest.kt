@@ -1,9 +1,6 @@
 package com.haruatari.akane.client.kernel.bencode.decoder
 
-import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.File
-import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Hash
-import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Info
-import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.MetaInfo
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.*
 import io.kotest.core.spec.Order
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
@@ -75,7 +72,7 @@ class MetaInfoDecoderTest : ExpectSpec({
     }
 })
 
-private fun decodeResource(resourceName: String): MetaInfo {
+private fun decodeResource(resourceName: String): MetaInfoInterface {
     val resource = object {}::class.java.getResourceAsStream(resourceName)
     val decoder = MetaInfoDecoder(resource!!)
 

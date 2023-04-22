@@ -1,9 +1,9 @@
 package com.haruatari.akane.client.kernel.bencode.dto.metaInfo
 
 data class File(
-    val path: Array<String>,
-    val length: Long
-) {
+    override val path: Array<String>,
+    override val length: Long
+) : FileInterface {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

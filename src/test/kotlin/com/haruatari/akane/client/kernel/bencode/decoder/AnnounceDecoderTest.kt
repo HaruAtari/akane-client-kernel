@@ -1,6 +1,7 @@
 package com.haruatari.akane.client.kernel.bencode.decoder
 
 import com.haruatari.akane.client.kernel.bencode.dto.announce.Announce
+import com.haruatari.akane.client.kernel.bencode.dto.announce.AnnounceInterface
 import com.haruatari.akane.client.kernel.bencode.dto.announce.Peer
 import io.kotest.core.spec.style.ExpectSpec
 import io.kotest.matchers.shouldBe
@@ -39,7 +40,7 @@ class AnnounceDecoderTest : ExpectSpec({
     }
 })
 
-private fun decodeContent(content: String): Announce {
+private fun decodeContent(content: String): AnnounceInterface {
     val decoder = AnnounceDecoder(content.byteInputStream())
 
     return decoder.decode()

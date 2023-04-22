@@ -2,13 +2,13 @@ package com.haruatari.akane.client.kernel.bencode.dto.metaInfo
 
 import java.util.*
 
-fun Hash(hex: String): Hash {
-    check(hex.length % 2 == 0) { "HEX must have an even length" }
+ fun Hash(hex: String): Hash {
+     check(hex.length % 2 == 0) { "HEX must have an even length" }
 
-    return Hash(hex.lowercase().chunked(2).map { it.toInt(16).toByte() }.toByteArray())
-}
+     return Hash(hex.lowercase().chunked(2).map { it.toInt(16).toByte() }.toByteArray())
+ }
 
-data class Hash(private val bytes: ByteArray) {
+data class Hash(private val bytes: ByteArray) : HashInterface {
     private val urlSafeBytes: ByteArray = byteArrayOf(
         48, 49, 50, 51, 52, 53, 54, 55, 56, 57, // 0-9
         65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, // A-Z
@@ -16,11 +16,11 @@ data class Hash(private val bytes: ByteArray) {
         45, 46, 95, 126// . - _ ~
     )
 
-    fun getBytes(): ByteArray = bytes
+    override fun getBytes(): ByteArray = bytes
 
-    fun getHex(): String = HexFormat.of().formatHex(bytes)
+    override fun getHex(): String = HexFormat.of().formatHex(bytes)
 
-    fun getUrlEncoded(): String {
+    override fun getUrlEncoded(): String {
         val result = StringBuilder(bytes.size)
 
         for (byte in getBytes()) {

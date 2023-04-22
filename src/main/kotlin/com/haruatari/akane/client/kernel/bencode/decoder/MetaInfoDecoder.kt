@@ -2,10 +2,7 @@ package com.haruatari.akane.client.kernel.bencode.decoder
 
 import com.haruatari.akane.client.kernel.bencode.Reader
 import com.haruatari.akane.client.kernel.bencode.boxer.DictionaryBoxer
-import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.File
-import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Hash
-import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.Info
-import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.MetaInfo
+import com.haruatari.akane.client.kernel.bencode.dto.metaInfo.*
 import com.haruatari.akane.client.kernel.bencode.excetions.DecoderException
 import com.haruatari.akane.client.kernel.bencode.tokenizer.TokenizerFacade
 import com.haruatari.akane.client.kernel.bencode.tokenizer.dto.*
@@ -19,7 +16,7 @@ internal class MetaInfoDecoder(stream: InputStream) {
         reader = Reader(stream)
     }
 
-    fun decode(): MetaInfo {
+    fun decode(): MetaInfoInterface {
         val root = TokenizerFacade(reader).tokenize()
         if (root !is DictionaryToken) {
             throw DecoderException("The root node should be a dictionary.")
@@ -40,7 +37,7 @@ internal class MetaInfoDecoder(stream: InputStream) {
         return node.getValue()
     }
 
-    private fun decodeInfo(root: Map<String, Token>): Info {
+    private fun decodeInfo(root: Map<String, Token>): InfoInterface {
         val node = root["info"]
         if (node == null || node !is DictionaryToken) {
             throw DecoderException("The root dictionary should contains the 'info' dictionary element.")
@@ -86,7 +83,7 @@ internal class MetaInfoDecoder(stream: InputStream) {
         return node.getValue().toInt()
     }
 
-    private fun decodePieces(infoRoot: Map<String, Token>): Array<Hash> {
+    private fun decodePieces(infoRoot: Map<String, Token>): Array<HashInterface> {
         val node = infoRoot["pieces"]
         if (node == null || node !is StringToken) {
             throw DecoderException("The info dictionary should contains the 'pieces' string element.")
@@ -115,14 +112,14 @@ internal class MetaInfoDecoder(stream: InputStream) {
         return length.getValue()
     }
 
-    private fun decodeFiles(infoRoot: Map<String, Token>): Array<File> {
+    private fun decodeFiles(infoRoot: Map<String, Token>): Array<FileInterface> {
         val node = infoRoot["files"] ?: return emptyArray()
 
         if (node !is ListToken) {
             throw DecoderException("The info.files element should be a list.")
         }
 
-        val result = mutableListOf<File>()
+        val result = mutableListOf<FileInterface>()
         for (item in node.getValue()) {
             if (item !is DictionaryToken) {
                 throw DecoderException("The info.files list should contains only dictionary elements.")
