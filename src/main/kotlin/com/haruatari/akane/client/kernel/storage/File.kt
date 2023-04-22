@@ -1,12 +1,11 @@
 package com.haruatari.akane.client.kernel.storage
 
 import com.haruatari.akane.client.kernel.storage.exception.StorageException
-import java.io.Closeable
 import java.io.FileNotFoundException
 import java.io.RandomAccessFile
 import java.nio.file.Path
 
-class File(private val path: Path, val length: Long) : FileInterface, Closeable {
+class File(private val path: Path, override val length: Long) : FileInterface {
     private var fileAccess: RandomAccessFile? = null
 
     constructor(path: File, length: Long) : this(path.path, length)
@@ -35,6 +34,26 @@ class File(private val path: Path, val length: Long) : FileInterface, Closeable 
         access.write(data)
     }
 
+    override fun close() {
+        fileAccess?.close()
+    }
+
+    override fun toString(): String {
+        return "File(path: $path; length: $length)";
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return other is File
+            && other.path == this.path
+            && other.length == this.length
+    }
+
+    override fun hashCode(): Int {
+        var result = path.hashCode()
+        result = 31 * result + length.hashCode()
+        return result
+    }
+
     private fun getAccess(): RandomAccessFile {
         if (fileAccess == null) {
             try {
@@ -45,9 +64,5 @@ class File(private val path: Path, val length: Long) : FileInterface, Closeable 
         }
 
         return fileAccess!!
-    }
-
-    override fun close() {
-        fileAccess?.close()
     }
 }

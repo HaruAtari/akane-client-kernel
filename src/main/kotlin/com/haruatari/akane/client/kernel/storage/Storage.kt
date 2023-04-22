@@ -2,21 +2,9 @@ package com.haruatari.akane.client.kernel.storage
 
 import com.haruatari.akane.client.kernel.storage.exception.StorageException
 import java.nio.ByteBuffer
-import java.nio.file.Path
-import kotlin.io.path.exists
-import kotlin.io.path.isDirectory
-import kotlin.io.path.pathString
 
-class Storage(private val root: Path, private val files: List<File>) : StorageInterface {
+class Storage(private val files: List<FileInterface>) : StorageInterface {
     private val totalLength: Long = files.sumOf { it.length }
-
-    constructor(root: String, files: List<File>) : this(Path.of(root), files)
-
-    init {
-        if (root.exists() && !root.isDirectory()) {
-            throw StorageException("The root path '${root.pathString}' is not a directory.")
-        }
-    }
 
     override fun read(offset: Long, length: Int): ByteArray {
         if (length == 0) {
@@ -47,7 +35,20 @@ class Storage(private val root: Path, private val files: List<File>) : StorageIn
         }
     }
 
-    private fun accessData(offset: Long, length: Int, callback: (file: File, offset: Long, length: Int) -> Unit) {
+    override fun toString(): String {
+        return "Storage(files: ${files})";
+    }
+
+    override fun equals(other: Any?): Boolean {
+        return other is Storage
+            && other.files == this.files
+    }
+
+    override fun hashCode(): Int {
+        return files.hashCode()
+    }
+
+    private fun accessData(offset: Long, length: Int, callback: (file: FileInterface, offset: Long, length: Int) -> Unit) {
         val totalBeginning = offset
         val totalEnd = offset + length - 1
         if (totalEnd > totalLength) {

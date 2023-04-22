@@ -21,7 +21,7 @@ class StorageTest : ExpectSpec({
         file3 = mockk<File>(relaxed = true)
         every { file3.length } returns 5
 
-        storage = Storage("", listOf(file1, file2, file3))
+        storage = Storage(listOf(file1, file2, file3))
     }
 
     context("read") {
