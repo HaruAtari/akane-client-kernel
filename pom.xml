@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>kernel</artifactId>
-    <groupId>com.haruatari.akane.client</groupId>
+    <artifactId>client-kernel</artifactId>
+    <groupId>com.haruatari.akane</groupId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
